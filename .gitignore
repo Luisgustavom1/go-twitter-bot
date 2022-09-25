@@ -1,0 +1,15 @@
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+go.mod
+go.sum
+
+.env
+
+main
+main.zip
+
+

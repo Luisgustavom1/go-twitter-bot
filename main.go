@@ -13,14 +13,14 @@ import (
 	"github.com/dghubble/oauth1"
 )
 
-type DaysRemainig int
+type DaysRemaining int
 
 func main() {
 	lambda.Start(Handler)
 }
 
 func Handler() {
-	VACATION_DATE := "2023/02/06 06:00:00 -03"
+	VACATION_DATE := "2023/02/06 23:00:00 -03"
 
 	config := oauth1.NewConfig(
 		os.Getenv("API_KEY"),
@@ -33,12 +33,12 @@ func Handler() {
 	httpClient := config.Client(oauth1.NoContext, token)
 	client := twitter.NewClient(httpClient)
 
-	vacationDateFormated, err := getVacationDateFormated(VACATION_DATE)
+	vacationDateFormatted, err := getVacationDateFormatted(VACATION_DATE)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	daysToVacation := getDaysRemaining(vacationDateFormated)
+	daysToVacation := getDaysRemaining(vacationDateFormatted)
 	messageToTweet, err := generateMessageToTweet(daysToVacation)
 	if err != nil {
 		log.Fatal(err)
@@ -47,7 +47,7 @@ func Handler() {
 	client.Statuses.Update(messageToTweet, nil)
 }
 
-func getVacationDateFormated(date string) (time.Time, error) {
+func getVacationDateFormatted(date string) (time.Time, error) {
 	const shortFormat = "2006/01/02 15:04:05 -07"
 	dateParsed, err := time.Parse(shortFormat, date)
 
@@ -58,12 +58,12 @@ func getVacationDateFormated(date string) (time.Time, error) {
 	return dateParsed, nil
 }
 
-func getDaysRemaining(date time.Time) DaysRemainig {
+func getDaysRemaining(date time.Time) DaysRemaining {
 	today := time.Now()
-	return DaysRemainig(math.Ceil(date.Sub(today).Hours()/24))
+	return DaysRemaining(math.Ceil(date.Sub(today).Hours() / 24))
 }
 
-func generateMessageToTweet(d DaysRemainig) (string, error) {
+func generateMessageToTweet(d DaysRemaining) (string, error) {
 	var message string
 
 	if alreadyOnVacation(d) {
@@ -79,6 +79,6 @@ func generateMessageToTweet(d DaysRemainig) (string, error) {
 	return message, nil
 }
 
-func alreadyOnVacation(d DaysRemainig) bool {
+func alreadyOnVacation(d DaysRemaining) bool {
 	return d < 0
 }

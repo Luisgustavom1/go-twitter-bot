@@ -20,7 +20,7 @@ func main() {
 }
 
 func Handler() {
-	VACATION_DATE := "2023/02/06 23:00:00 -03"
+	VACATION_DATE := "2023/06/29 23:00:00 -03"
 
 	config := oauth1.NewConfig(
 		os.Getenv("API_KEY"),

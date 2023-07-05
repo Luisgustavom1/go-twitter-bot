@@ -60,7 +60,8 @@ func getVacationDateFormatted(date string) (time.Time, error) {
 
 func getDaysRemaining(date time.Time) DaysRemaining {
 	today := time.Now()
-	return DaysRemaining(math.Ceil(date.Sub(today).Hours() / 24))
+	duration := date.Sub(today)
+	return DaysRemaining(math.Ceil(duration.Hours() / 24))
 }
 
 func generateMessageToTweet(d DaysRemaining) (string, error) {
